@@ -57,7 +57,7 @@ class CustomTrainLoader:
             weights_only=False
         )
       
-        if idx == 3 :
+        if idx == 4 :
             start = idx  * self.chunk_size
             self.tokens = self.tokens_all[start:]
         else:
