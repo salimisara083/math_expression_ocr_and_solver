@@ -49,7 +49,7 @@ import gc
 
 class CustomTrainLoader:
 
-    def __init__(self, img_paths, tokens_tensor, chunk_size=15000):
+    def __init__(self, img_paths, tokens_tensor, chunk_size=10000):
 
         self.img_paths = img_paths
         self.chunk_size = chunk_size
