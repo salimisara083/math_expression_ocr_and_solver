@@ -84,7 +84,7 @@ class CustomTrainLoader:
             batch_size=128,
             shuffle=True,
             collate_fn=collate,
-            num_workers=8,
+            num_workers=4,
             pin_memory = True,
             persistent_workers = True
         )
