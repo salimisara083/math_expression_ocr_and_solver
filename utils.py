@@ -81,7 +81,7 @@ class CustomTrainLoader:
 
         self.loader = DataLoader(
             self.dataset,
-            batch_size=128,
+            batch_size=200,
             shuffle=True,
             collate_fn=collate,
             num_workers=4,
