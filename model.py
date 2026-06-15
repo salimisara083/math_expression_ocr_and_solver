@@ -3,11 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import models
 
-resnet_model = models.resnet18(pretrained=True)
+
 
 class CRNN_Model(nn.Module): 
-    def __init__(self, vocab_size, resnet_model=resnet_model, hidden_size=384, num_layers=2, dropout=0.3):
+    def __init__(self, vocab_size, hidden_size=384, num_layers=2, dropout=0.3):
         super(CRNN_Model, self).__init__()  
+        resnet_model = models.resnet18(pretrained=True)
         self.vocab_size = vocab_size
         self.hidden_size = hidden_size
         self.num_layers = num_layers
@@ -22,8 +23,8 @@ class CRNN_Model(nn.Module):
 
         #modified layer3
         self.layer3 = resnet_model.layer3
-        self.layer3[0].conv1.stirde = (1, 1)
-        self.layer3[0].downsample[0].stirde = (1, 1)
+        self.layer3[0].conv1.stride = (1, 1)
+        self.layer3[0].downsample[0].stride = (1, 1)
         
         # Pool height AFTER all convolutions
         self.height_pool = nn.AdaptiveAvgPool2d((6, None))  # Pool to height=6
