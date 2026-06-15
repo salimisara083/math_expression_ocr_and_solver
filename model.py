@@ -17,8 +17,8 @@ class CRNN_Model(nn.Module):
         # ========== ENCODER ==========
          #modified layer3
         self.layer3 = copy.deepcopy(resnet.layer3)
-        self.layer3[0].conv1.stride = 1
-        self.layer3[0].downsample[0].stride = 1
+        self.layer3[0].conv1.stride = (1,1)
+        self.layer3[0].downsample[0].stride = (1,1)
         
         self.encoder = nn.Sequential(
         resnet.conv1,
