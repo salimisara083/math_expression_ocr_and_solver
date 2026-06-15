@@ -91,7 +91,7 @@ class CustomTrainLoader:
     def release(self):
 
         del self.loader
-        del self.imgs
+        del self.imgs_tensor
         del self.tokens
         del self.dataset
 
