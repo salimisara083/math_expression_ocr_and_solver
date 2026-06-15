@@ -71,7 +71,6 @@ class CRNN_Model(nn.Module):
         x = self.dropout(x)
         x = self.fc(x)  # (batch, width, vocab_size)
         
-        # CTC expects (time_steps, batch, vocab_size)
-        x = x.permute(1, 0, 2)  # (width, batch, vocab_size)
+        
         
         return x
