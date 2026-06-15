@@ -3,6 +3,15 @@ from torch.utils.data import DataLoader, TensorDataset
 from collate import collate
 import gc
 
+def tokens_batch_normalizer(tokens_batch_flat, target_lens) :
+    start = 0
+    lst = []
+    for l in target_lens:
+        x = tokens_batch_flat[start: start+l]
+        start += l
+        lst.append(x)
+    return lst
+    
 def ctc_decode(log_probs, blank_id=0):
     """
     Greedy decode CTC output to token sequence
