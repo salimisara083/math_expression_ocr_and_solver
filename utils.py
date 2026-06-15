@@ -83,7 +83,10 @@ class CustomTrainLoader:
             self.dataset,
             batch_size=128,
             shuffle=True,
-            collate_fn=collate
+            collate_fn=collate,
+            num_workers=8,
+            pin_memory = True,
+            persistent_workers = True
         )
         return self.loader
 
