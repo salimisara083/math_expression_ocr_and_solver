@@ -2,29 +2,32 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import models
+import copy
 
 
 
 class CRNN_Model(nn.Module): 
     def __init__(self, vocab_size, hidden_size=384, num_layers=2, dropout=0.3):
         super(CRNN_Model, self).__init__()  
-        resnet_model = models.resnet18(pretrained=True)
+        resnet = models.resnet18(pretrained=True)
         self.vocab_size = vocab_size
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         
         # ========== ENCODER ==========
-        self.conv1 = resnet_model.conv1
-        self.bn1 = resnet_model.bn1
-        self.relu = resnet_model.relu
+         #modified layer3
+        self.layer3 = copy.deepcopy(resnet.layer3)
+        self.layer3[0].conv1.stride = 1
+        self.layer3[0].downsample[0].stride = 1
         
-        self.layer1 = resnet_model.layer1
-        self.layer2 = resnet_model.layer2
-
-        #modified layer3
-        self.layer3 = resnet_model.layer3
-        self.layer3[0].conv1.stride = (1, 1)
-        self.layer3[0].downsample[0].stride = (1, 1)
+        self.encoder = nn.Sequential(
+        resnet.conv1,
+        resnet.bn1,
+        resnet.relu,
+        resnet.layer1,
+        resnet.layer2,
+        self.layer3
+        )
         
         # Pool height AFTER all convolutions
         self.height_pool = nn.AdaptiveAvgPool2d((6, None))  # Pool to height=6
@@ -51,13 +54,7 @@ class CRNN_Model(nn.Module):
         
     def forward(self, x):
         # Encoder forward (NO maxpool)
-        x = self.conv1(x)
-        x = self.bn1(x)
-        x = self.relu(x)
-        
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.layer3(x)
+        x = self.encoder(x)
         
         # Pool height AFTER convolutions (critical!)
         x = self.height_pool(x)  # (batch, 256, 6, width)
